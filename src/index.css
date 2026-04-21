@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #D6D7D7;
+  color: #070708;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c0c0c0; border-radius: 2px; }
+
+/* Card base */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+}
+
+/* Gradient accent background */
+.bg-gradient-brand {
+  background: linear-gradient(135deg, #070708 0%, #1a1a1c 100%);
+}
+
+/* Red glow button */
+.btn-red {
+  background: #FA133A;
+  color: white;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(250, 19, 58, 0.35);
+}
+.btn-red:hover {
+  background: #e0102f;
+  box-shadow: 0 6px 20px rgba(250, 19, 58, 0.45);
+  transform: translateY(-1px);
+}
+.btn-red:active {
+  transform: translateY(0);
+}
+.btn-red:disabled {
+  opacity: 0.55;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Input base */
+.input-base {
+  width: 100%;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  background: #fafafa;
+}
+.input-base:focus {
+  border-color: #FA133A;
+  box-shadow: 0 0 0 3px rgba(250,19,58,0.1);
+  background: #fff;
+}
+
+/* Dark card */
+.card-dark {
+  background: #070708;
+  border-radius: 16px;
+  color: white;
+}
+
+/* Dark input (for dark card contexts) */
+.input-dark {
+  width: 100%;
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  background: rgba(255,255,255,0.05);
+  color: white;
+}
+.input-dark::placeholder { color: rgba(255,255,255,0.25); }
+.input-dark:focus {
+  border-color: #FA133A;
+  box-shadow: 0 0 0 3px rgba(250,19,58,0.15);
+  background: rgba(255,255,255,0.08);
+}
+
+/* Select light (for use on the grey page background) */
+.select-light {
+  border: 1.5px solid rgba(7,7,8,0.15);
+  border-radius: 10px;
+  padding: 7px 12px;
+  font-size: 13px;
+  outline: none;
+  background: #ffffff;
+  color: #070708;
+  cursor: pointer;
+  font-weight: 600;
+}
+.select-light:focus {
+  border-color: #FA133A;
+  box-shadow: 0 0 0 3px rgba(250,19,58,0.1);
+}
+
+/* Select dark */
+.select-dark {
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 13px;
+  outline: none;
+  background: rgba(255,255,255,0.06);
+  color: white;
+  cursor: pointer;
+}
+.select-dark:focus {
+  border-color: #FA133A;
+}
+.select-dark option {
+  background: #1a1a1c;
+  color: white;
+}
+
+/* Outline red button */
+.btn-red-outline {
+  border: 2px solid #FA133A;
+  color: #FA133A;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: all 0.2s;
+  background: transparent;
+}
+.btn-red-outline:hover {
+  background: #FA133A;
+  color: white;
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Gestor de Gastos",
+  "short_name": "GastIA",
+  "description": "Gestión de gastos e ingresos personales",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#D6D7D7",
+  "theme_color": "#070708",
+  "icons": [
+    {
+      "src": "/logo-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

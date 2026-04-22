@@ -43,12 +43,14 @@ export default function Layout() {
 
         {/* Top bar */}
         <div className="flex items-center justify-between px-4 md:px-6 h-12">
-          <img
-            src="/logo-gastia.png"
-            alt="GastIA"
-            className="h-7 w-auto max-w-[140px] object-contain"
-            onError={e => { e.target.style.display = 'none' }}
-          />
+          <button onClick={() => navigate('/home')}>
+            <img
+              src="/logo-gastia.png"
+              alt="GastIA"
+              className="h-7 w-auto max-w-[140px] object-contain"
+              onError={e => { e.target.style.display = 'none' }}
+            />
+          </button>
 
           {/* Desktop: user info */}
           <div className="hidden md:flex items-center gap-3">
@@ -185,6 +187,18 @@ export default function Layout() {
       {/* Main content */}
       <main className="flex-1 overflow-auto pt-12 pb-6 md:pt-[88px]">
         <Outlet />
+
+        {/* TRS credit — aparece al pie de todas las páginas */}
+        <div className="flex flex-col items-center gap-3 py-8 mt-4">
+          <p className="text-[#070708]/30 text-xs uppercase tracking-widest font-semibold">Desarrollado por</p>
+          <img
+            src="/Logo-trs.png"
+            alt="TRS Automatizaciones"
+            className="h-10 w-auto max-w-[160px] object-contain opacity-50 hover:opacity-80 transition-opacity"
+            onError={e => { e.target.style.display = 'none' }}
+          />
+          <p className="text-[#070708]/40 text-xs font-medium">TRS Automatizaciones</p>
+        </div>
       </main>
 
       <LogroToast />

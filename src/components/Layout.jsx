@@ -56,11 +56,6 @@ export default function Layout() {
           {/* Desktop: user info */}
           <div className="hidden md:flex items-center gap-3">
             {nivel && <span title={nivel.nombre} className="text-base cursor-default select-none">{nivel.emoji}</span>}
-            {plan && (
-              <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full tracking-wider ${
-                plan === 'pro' ? 'bg-[#FA133A] text-white' : 'bg-white/10 text-white/60'
-              }`}>{plan.toUpperCase()}</span>
-            )}
             <button onClick={handleLogout} className="text-xs text-white/40 hover:text-white/80 transition-colors">
               Salir
             </button>
@@ -88,7 +83,7 @@ export default function Layout() {
               className={({ isActive }) =>
                 `flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
                   isActive ? 'border-[#FA133A] text-white' : 'border-transparent text-white/40 hover:text-white/70'
-                } ${!item.plans.includes(plan) ? 'opacity-40' : ''}`
+                }`
               }
             >
               <span className="text-sm">{item.icon}</span>
@@ -132,43 +127,30 @@ export default function Layout() {
               </button>
             </div>
 
-            {/* Plan badge */}
-            {plan && (
-              <div className="px-5 pt-4">
-                <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-                  plan === 'pro' ? 'bg-[#FA133A] text-white' : 'bg-white/10 text-white/50'
-                }`}>{plan.toUpperCase()}</span>
-              </div>
-            )}
-
             {/* Nav links */}
             <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-              {navItems.map(item => {
-                const disponible = item.plans.includes(plan)
-                return (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    onClick={() => setMenuOpen(false)}
-                    className={({ isActive }) =>
-                      `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-                        isActive
-                          ? 'bg-[#FA133A]/15 text-white'
-                          : 'text-white/60 hover:bg-white/5 hover:text-white'
-                      } ${!disponible ? 'opacity-40' : ''}`
-                    }
-                  >
-                    {({ isActive }) => (
-                      <>
-                        <span className="text-xl w-7 text-center">{item.icon}</span>
-                        <span className="font-semibold text-sm flex-1">{item.label}</span>
-                        {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#FA133A]" />}
-                        {!disponible && <span className="text-xs text-white/30 font-bold">PRO</span>}
-                      </>
-                    )}
-                  </NavLink>
-                )
-              })}
+              {navItems.map(item => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+                      isActive
+                        ? 'bg-[#FA133A]/15 text-white'
+                        : 'text-white/60 hover:bg-white/5 hover:text-white'
+                    }`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      <span className="text-xl w-7 text-center">{item.icon}</span>
+                      <span className="font-semibold text-sm flex-1">{item.label}</span>
+                      {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#FA133A]" />}
+                    </>
+                  )}
+                </NavLink>
+              ))}
             </nav>
 
             {/* Logout */}

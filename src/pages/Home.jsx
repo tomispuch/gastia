@@ -143,7 +143,7 @@ export default function Home() {
 
   const balance = totalIngresos - totalGastos
   const nombreUsuario = user?.user_metadata?.nombre || user?.email?.split('@')[0] || 'Usuario'
-  const mostrarSelectorCuenta = plan === 'pro' && cuentas.length > 1
+  const mostrarSelectorCuenta = cuentas.length > 1
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-4">
@@ -183,8 +183,8 @@ export default function Home() {
         )}
       </div>
 
-      {/* Cards de cuentas — solo Pro */}
-      {plan === 'pro' && cuentas.length > 0 && (
+      {/* Cards de cuentas */}
+      {cuentas.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-2">
             <p className="text-xs font-bold text-[#070708]/50 uppercase tracking-widest">Cuentas</p>
@@ -314,27 +314,21 @@ export default function Home() {
       <div>
         <p className="text-xs font-bold text-[#070708]/50 uppercase tracking-widest mb-3">Acceso rápido</p>
         <div className="grid grid-cols-2 gap-3">
-          {ACCIONES.map(accion => {
-            const disponible = accion.plans.includes(plan)
-            return (
-              <button key={accion.to}
-                onClick={() => disponible && navigate(accion.to)}
-                className={`card-dark p-4 text-left transition-all ${
-                  disponible ? 'hover:scale-[1.02] active:scale-[0.98] cursor-pointer' : 'opacity-40 cursor-not-allowed'
-                }`}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                    style={{ background: accion.color + '22' }}>
-                    {accion.icon}
-                  </div>
-                  {!disponible && <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-white/10 text-white/40">PRO</span>}
+          {ACCIONES.map(accion => (
+            <button key={accion.to}
+              onClick={() => navigate(accion.to)}
+              className="card-dark p-4 text-left transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            >
+              <div className="mb-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
+                  style={{ background: accion.color + '22' }}>
+                  {accion.icon}
                 </div>
-                <p className="text-white font-bold text-sm">{accion.label}</p>
-                <p className="text-white/40 text-xs mt-0.5 leading-snug">{accion.desc}</p>
-              </button>
-            )
-          })}
+              </div>
+              <p className="text-white font-bold text-sm">{accion.label}</p>
+              <p className="text-white/40 text-xs mt-0.5 leading-snug">{accion.desc}</p>
+            </button>
+          ))}
         </div>
       </div>
     </div>

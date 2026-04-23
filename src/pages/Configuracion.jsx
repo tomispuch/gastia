@@ -21,11 +21,9 @@ export default function Configuracion() {
     if (!user) return
     supabase.from('usuarios_config').select('resumen_mensual_activo').eq('user_id', user.id).single()
       .then(({ data }) => setResumenActivo(data?.resumen_mensual_activo ?? false))
-    if (plan === 'pro') {
-      supabase.from('categorias_custom').select('*').eq('user_id', user.id).order('created_at')
-        .then(({ data }) => setCategorias(data || []))
-    }
-  }, [user, plan])
+    supabase.from('categorias_custom').select('*').eq('user_id', user.id).order('created_at')
+      .then(({ data }) => setCategorias(data || []))
+  }, [user])
 
   async function handleChangePassword(e) {
     e.preventDefault()
@@ -101,63 +99,54 @@ export default function Configuracion() {
       </div>
 
       {/* Pro features */}
-      {plan === 'pro' ? (
-        <>
-          <div className="card-dark p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-white font-semibold text-sm">Resumen mensual por email</p>
-                <p className="text-white/40 text-xs mt-0.5">Recibís un resumen automático al fin de mes</p>
-              </div>
-              <button
-                onClick={() => toggleResumen(!resumenActivo)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${resumenActivo ? 'bg-[#FA133A]' : 'bg-white/15'}`}
-              >
-                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${resumenActivo ? 'translate-x-6' : 'translate-x-1'}`} />
-              </button>
-            </div>
+      <div className="card-dark p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-white font-semibold text-sm">Resumen mensual por email</p>
+            <p className="text-white/40 text-xs mt-0.5">Recibís un resumen automático al fin de mes</p>
           </div>
-
-          <div className="card-dark p-5 space-y-4">
-            <h2 className="text-white font-bold text-sm">Categorías personalizadas</h2>
-            <form onSubmit={handleAddCategoria} className="flex gap-2">
-              <input
-                type="text"
-                value={nuevaCategoria}
-                onChange={e => setNuevaCategoria(e.target.value)}
-                placeholder="Nueva categoría"
-                className="input-dark flex-1"
-              />
-              <button
-                type="submit"
-                disabled={catLoading || !nuevaCategoria.trim()}
-                className="btn-red px-4 py-2 text-sm flex-shrink-0"
-              >
-                Agregar
-              </button>
-            </form>
-            {categorias.length === 0 ? (
-              <p className="text-white/30 text-sm text-center py-2">Sin categorías personalizadas.</p>
-            ) : (
-              <div className="space-y-2">
-                {categorias.map(c => (
-                  <div key={c.id} className="flex items-center justify-between bg-white/5 rounded-xl px-4 py-2.5">
-                    <span className="text-white text-sm">{c.categoria}</span>
-                    <button onClick={() => handleDeleteCategoria(c.id)} className="text-xs text-[#FA133A] hover:text-red-400 font-semibold">
-                      Eliminar
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </>
-      ) : (
-        <div className="card-dark p-5 opacity-50">
-          <p className="text-white font-semibold text-sm mb-1">Resumen mensual · Categorías personalizadas</p>
-          <p className="text-white/50 text-xs">Disponibles en el plan Pro.</p>
+          <button
+            onClick={() => toggleResumen(!resumenActivo)}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${resumenActivo ? 'bg-[#FA133A]' : 'bg-white/15'}`}
+          >
+            <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${resumenActivo ? 'translate-x-6' : 'translate-x-1'}`} />
+          </button>
         </div>
-      )}
+      </div>
+
+      <div className="card-dark p-5 space-y-4">
+        <h2 className="text-white font-bold text-sm">Categorías personalizadas</h2>
+        <form onSubmit={handleAddCategoria} className="flex gap-2">
+          <input
+            type="text"
+            value={nuevaCategoria}
+            onChange={e => setNuevaCategoria(e.target.value)}
+            placeholder="Nueva categoría"
+            className="input-dark flex-1"
+          />
+          <button
+            type="submit"
+            disabled={catLoading || !nuevaCategoria.trim()}
+            className="btn-red px-4 py-2 text-sm flex-shrink-0"
+          >
+            Agregar
+          </button>
+        </form>
+        {categorias.length === 0 ? (
+          <p className="text-white/30 text-sm text-center py-2">Sin categorías personalizadas.</p>
+        ) : (
+          <div className="space-y-2">
+            {categorias.map(c => (
+              <div key={c.id} className="flex items-center justify-between bg-white/5 rounded-xl px-4 py-2.5">
+                <span className="text-white text-sm">{c.categoria}</span>
+                <button onClick={() => handleDeleteCategoria(c.id)} className="text-xs text-[#FA133A] hover:text-red-400 font-semibold">
+                  Eliminar
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

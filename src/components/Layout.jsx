@@ -47,9 +47,9 @@ export default function Layout() {
         <div className="flex items-center justify-between px-4 md:px-6 h-12">
           <button onClick={() => navigate('/home')}>
             <img
-              src="/logo-gastia.png"
+              src="/logo-icon.png"
               alt="GastIA"
-              className="h-7 w-auto max-w-[140px] object-contain"
+              className="h-8 w-8 object-contain"
               onError={e => { e.target.style.display = 'none' }}
             />
           </button>

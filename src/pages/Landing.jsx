@@ -94,7 +94,7 @@ export default function Landing() {
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4"
         style={{ background: 'rgba(7,7,8,0.85)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-        <img src="/logo-gastia.png" alt="GastIA" className="h-8 object-contain" onError={e => e.target.style.display = 'none'} />
+        <img src="/logo-icon.png" alt="GastIA" className="h-8 w-8 object-contain" onError={e => e.target.style.display = 'none'} />
         <div className="flex items-center gap-3">
           {!loading && user ? (
             <Link to="/home"

@@ -16,24 +16,33 @@ import Cuentas from './pages/Cuentas'
 import Soporte from './pages/Soporte'
 import Layout from './components/Layout'
 
+const Spinner = () => (
+  <div className="flex items-center justify-center min-h-screen bg-[#D6D7D7]">
+    <div className="w-8 h-8 rounded-full border-2 border-[#FA133A] border-t-transparent animate-spin" />
+  </div>
+)
+
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth()
-  if (loading) return (
-    <div className="flex items-center justify-center min-h-screen bg-[#D6D7D7]">
-      <div className="w-8 h-8 rounded-full border-2 border-[#FA133A] border-t-transparent animate-spin" />
-    </div>
-  )
+  if (loading) return <Spinner />
   if (!user) return <Navigate to="/login" replace />
   return <GamificacionProvider userId={user.id}>{children}</GamificacionProvider>
+}
+
+function PublicRoute({ children }) {
+  const { user, loading } = useAuth()
+  if (loading) return <Spinner />
+  if (user) return <Navigate to="/home" replace />
+  return children
 }
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Registro />} />
+        <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
+        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path="/registro" element={<PublicRoute><Registro /></PublicRoute>} />
         <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
           <Route path="/home" element={<Home />} />
           <Route path="/historial" element={<Historial />} />

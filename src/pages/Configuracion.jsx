@@ -115,6 +115,66 @@ export default function Configuracion() {
         </div>
       </div>
 
+      {/* Instalar app */}
+      <div className="card-dark p-5 space-y-4">
+        <h2 className="text-white font-bold text-sm">Instalar en tu celular</h2>
+        <p className="text-white/40 text-xs leading-relaxed">
+          GastIA funciona como app nativa. Se instala sin App Store ni Google Play, directo desde el navegador.
+        </p>
+
+        {/* Android */}
+        <div className="rounded-2xl p-4 space-y-3" style={{ background: 'rgba(255,255,255,0.05)' }}>
+          <div className="flex items-center gap-2">
+            <span className="text-lg">🤖</span>
+            <p className="text-white font-semibold text-sm">Android (Chrome)</p>
+          </div>
+          <ol className="space-y-2">
+            {[
+              'Abrí GastIA en Chrome',
+              'Tocá el menú de los 3 puntos (arriba a la derecha)',
+              'Seleccioná "Agregar a pantalla de inicio" o "Instalar aplicación"',
+              'Confirmá — aparece el ícono en tu pantalla',
+            ].map((paso, i) => (
+              <li key={i} className="flex items-start gap-2.5">
+                <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black"
+                  style={{ background: 'rgba(250,19,58,0.2)', color: '#FA133A' }}>
+                  {i + 1}
+                </span>
+                <span className="text-white/60 text-xs leading-relaxed">{paso}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {/* iPhone */}
+        <div className="rounded-2xl p-4 space-y-3" style={{ background: 'rgba(255,255,255,0.05)' }}>
+          <div className="flex items-center gap-2">
+            <span className="text-lg">🍎</span>
+            <p className="text-white font-semibold text-sm">iPhone (Safari)</p>
+          </div>
+          <ol className="space-y-2">
+            {[
+              'Abrí GastIA en Safari (tiene que ser Safari, no Chrome)',
+              'Tocá el botón de compartir — el cuadrado con la flecha hacia arriba',
+              'Seleccioná "Agregar a pantalla de inicio"',
+              'Confirmá — aparece el ícono en tu pantalla',
+            ].map((paso, i) => (
+              <li key={i} className="flex items-start gap-2.5">
+                <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black"
+                  style={{ background: 'rgba(250,19,58,0.2)', color: '#FA133A' }}>
+                  {i + 1}
+                </span>
+                <span className="text-white/60 text-xs leading-relaxed">{paso}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <p className="text-white/25 text-xs text-center">
+          Una vez instalada se abre en pantalla completa, sin barra del navegador.
+        </p>
+      </div>
+
       <div className="card-dark p-5 space-y-4">
         <h2 className="text-white font-bold text-sm">Categorías personalizadas</h2>
         <form onSubmit={handleAddCategoria} className="flex gap-2">

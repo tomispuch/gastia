@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { usePlan } from '../hooks/usePlan'
 import ImportarExcel from '../components/ImportarExcel'
 
-const CATEGORIAS_GASTO = ['Comida y bebida','Transporte','Salud','Vivienda','Entretenimiento','Ropa e indumentaria','Educación','Tecnología','Viajes','Otros']
+const CATEGORIAS_GASTO = ['Comida y bebida','Transporte','Salud','Vivienda','Entretenimiento','Ropa e indumentaria','Educación','Tecnología','Viajes','Impuesto','Otros']
 const CATEGORIAS_INGRESO = ['Sueldo','Freelance','Venta','Inversiones','Regalo','Otro']
 const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
 

@@ -100,8 +100,16 @@ export default function Home() {
     const r = new SR()
     r.lang = 'es-AR'; r.continuous = false; r.interimResults = true
     r.onstart = () => setListening(true)
-    r.onresult = (e) => setTexto(Array.from(e.results).map(r => r[0].transcript).join(''))
-    r.onend = () => setListening(false)
+    r.onresult = (e) => {
+      const results = Array.from(e.results)
+      const final    = results.filter(r => r.isFinal).map(r => r[0].transcript).join('')
+      const interim  = results.filter(r => !r.isFinal).map(r => r[0].transcript).join('')
+      setTexto(final + interim)
+    }
+    r.onend = () => {
+      setListening(false)
+      recognitionRef.current = null  // libera el micrófono en iOS
+    }
     r.onerror = (e) => {
       setListening(false)
       if (e.error === 'not-allowed') {

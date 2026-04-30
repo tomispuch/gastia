@@ -123,4 +123,17 @@
 
 ---
 
+## Performance y PWA
+
+- **Service Worker** activo: cachea todos los assets (JS, CSS, imágenes, fuentes) en el primer acceso
+- **Carga instantánea** en visitas posteriores: la app abre desde el caché local sin esperar la red
+- **Modo offline parcial**: si no hay internet, la app igual abre y muestra la interfaz (los datos de Supabase requieren conexión)
+- **Actualizaciones automáticas**: cuando se publica una nueva versión, el Service Worker se actualiza en segundo plano sin que el usuario tenga que hacer nada
+- **Llamadas a Supabase**: estrategia NetworkFirst — intenta la red, usa caché como fallback si no hay conexión
+- **Fuentes de Google**: cacheadas por 1 año (no cambian)
+- **N8N webhooks**: siempre por red (no se cachean, requieren conectividad real)
+- **Lazy loading** de páginas secundarias: solo se descarga el código de cada sección cuando el usuario navega a ella, reduciendo el bundle inicial
+
+---
+
 *© TRS Automatizaciones — Todos los derechos reservados*

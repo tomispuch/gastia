@@ -1,21 +1,23 @@
 {
-  "name": "Gestor de Gastos",
+  "name": "GastIA",
   "short_name": "GastIA",
-  "description": "Gestión de gastos e ingresos personales",
+  "description": "Registrá gastos e ingresos por voz o texto. IA que clasifica todo sola.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#D6D7D7",
+  "background_color": "#070708",
   "theme_color": "#070708",
   "icons": [
     {
-      "src": "/logo-icon.png",
+      "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/logo-icon.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

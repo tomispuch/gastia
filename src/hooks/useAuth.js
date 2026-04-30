@@ -15,7 +15,21 @@ export function useAuth() {
       setUser(session?.user ?? null)
     })
 
-    return () => subscription.unsubscribe()
+    // Cuando la PWA vuelve al frente después de estar en segundo plano,
+    // forzar una verificación de sesión para evitar cierres inesperados.
+    function handleVisibilityChange() {
+      if (document.visibilityState === 'visible') {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          setUser(session?.user ?? null)
+        })
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      subscription.unsubscribe()
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
   }, [])
 
   return { user, loading }

@@ -40,7 +40,18 @@ export default function Registro() {
     })
 
     if (signUpError) {
-      setError('Ocurrió un error al crear la cuenta. Intentá de nuevo.')
+      const msg = signUpError.message?.toLowerCase() || ''
+      if (msg.includes('already registered') || msg.includes('already exists')) {
+        setError('Ya existe una cuenta con ese email. ¿Querés iniciar sesión?')
+      } else if (msg.includes('password') && msg.includes('characters')) {
+        setError('La contraseña es muy corta. Usá al menos 8 caracteres.')
+      } else if (msg.includes('rate limit') || msg.includes('too many')) {
+        setError('Demasiados intentos. Esperá unos minutos e intentá de nuevo.')
+      } else if (msg.includes('invalid email') || msg.includes('email')) {
+        setError('El email no es válido o no está permitido.')
+      } else {
+        setError(`Error al crear la cuenta: ${signUpError.message}`)
+      }
       setLoading(false)
       return
     }

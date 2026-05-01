@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { isValidEmail, isValidPassword, sanitizeName } from '../lib/validate'
 
@@ -9,7 +9,7 @@ export default function Registro() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [confirmado, setConfirmado] = useState(false)
+  const navigate = useNavigate()
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -52,7 +52,7 @@ export default function Registro() {
     }
 
     setLoading(false)
-    setConfirmado(true)
+    navigate('/home')
   }
 
   return (
@@ -94,92 +94,67 @@ export default function Registro() {
         </div>
 
         <div className="w-full max-w-sm">
-          {confirmado ? (
-            <div className="text-center space-y-5">
-              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto text-4xl"
-                style={{ background: 'rgba(250,19,58,0.1)' }}>
-                📧
+          <div className="mb-8">
+            <h2 className="text-2xl font-black text-[#070708]">Crear cuenta</h2>
+            <p className="text-gray-500 text-sm mt-1">Es gratis y lleva menos de un minuto</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="flex items-center gap-2 bg-red-50 border border-red-100 text-[#FA133A] text-sm rounded-xl px-4 py-3">
+                <span>⚠</span> {error}
               </div>
-              <div>
-                <h2 className="text-2xl font-black text-[#070708]">Revisá tu email</h2>
-                <p className="text-gray-500 text-sm mt-2">
-                  Te enviamos un link de confirmación a{' '}
-                  <span className="font-semibold text-[#070708]">{email}</span>.
-                </p>
-                <p className="text-gray-400 text-xs mt-1">Si no lo ves, revisá la carpeta de spam.</p>
-              </div>
-              <Link
-                to="/login"
-                className="btn-red inline-block w-full py-3 text-sm text-center"
-              >
-                Ir al inicio de sesión
-              </Link>
+            )}
+
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1.5 tracking-wide uppercase">Nombre</label>
+              <input
+                type="text"
+                required
+                maxLength={50}
+                value={nombre}
+                onChange={e => setNombre(e.target.value)}
+                className="input-base"
+                placeholder="Tu nombre"
+              />
             </div>
-          ) : (
-            <>
-              <div className="mb-8">
-                <h2 className="text-2xl font-black text-[#070708]">Crear cuenta</h2>
-                <p className="text-gray-500 text-sm mt-1">Es gratis y lleva menos de un minuto</p>
-              </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {error && (
-                  <div className="flex items-center gap-2 bg-red-50 border border-red-100 text-[#FA133A] text-sm rounded-xl px-4 py-3">
-                    <span>⚠</span> {error}
-                  </div>
-                )}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1.5 tracking-wide uppercase">Email</label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                className="input-base"
+                placeholder="tu@email.com"
+              />
+            </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5 tracking-wide uppercase">Nombre</label>
-                  <input
-                    type="text"
-                    required
-                    maxLength={50}
-                    value={nombre}
-                    onChange={e => setNombre(e.target.value)}
-                    className="input-base"
-                    placeholder="Tu nombre"
-                  />
-                </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1.5 tracking-wide uppercase">Contraseña</label>
+              <input
+                type="password"
+                required
+                minLength={8}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className="input-base"
+                placeholder="Mínimo 8 caracteres"
+              />
+            </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5 tracking-wide uppercase">Email</label>
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    className="input-base"
-                    placeholder="tu@email.com"
-                  />
-                </div>
+            <button type="submit" disabled={loading} className="btn-red w-full py-3 text-sm mt-2">
+              {loading ? 'Creando cuenta...' : 'Crear cuenta gratis'}
+            </button>
 
-                <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5 tracking-wide uppercase">Contraseña</label>
-                  <input
-                    type="password"
-                    required
-                    minLength={8}
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    className="input-base"
-                    placeholder="Mínimo 8 caracteres"
-                  />
-                </div>
-
-                <button type="submit" disabled={loading} className="btn-red w-full py-3 text-sm mt-2">
-                  {loading ? 'Creando cuenta...' : 'Crear cuenta gratis'}
-                </button>
-
-                <p className="text-center text-xs text-gray-400 pt-1">
-                  ¿Ya tenés cuenta?{' '}
-                  <Link to="/login" className="font-semibold text-[#FA133A] hover:text-red-700">
-                    Iniciar sesión
-                  </Link>
-                </p>
-              </form>
-            </>
-          )}
+            <p className="text-center text-xs text-gray-400 pt-1">
+              ¿Ya tenés cuenta?{' '}
+              <Link to="/login" className="font-semibold text-[#FA133A] hover:text-red-700">
+                Iniciar sesión
+              </Link>
+            </p>
+          </form>
         </div>
       </div>
     </div>

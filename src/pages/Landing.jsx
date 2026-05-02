@@ -2,6 +2,21 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useState, useEffect } from 'react'
 
+const TICKER = [
+  { label: 'Delivery', amount: '-$12.400', red: true },
+  { label: 'Supermercado', amount: '-$24.300', red: true },
+  { label: 'Sueldo', amount: '+$320.000', red: false },
+  { label: 'Nafta', amount: '-$15.600', red: true },
+  { label: 'Netflix', amount: '-$4.999', red: true },
+  { label: 'Alquiler', amount: '-$180.000', red: true },
+  { label: 'Freelance', amount: '+$85.000', red: false },
+  { label: 'Gimnasio', amount: '-$9.800', red: true },
+  { label: 'Uber', amount: '-$3.200', red: true },
+  { label: 'Farmacia', amount: '-$7.100', red: true },
+  { label: 'Bar', amount: '-$6.500', red: true },
+  { label: 'Luz', amount: '-$11.400', red: true },
+]
+
 const DEMOS = [
   {
     input: 'Gasté $5.000 en comida rápida',
@@ -228,6 +243,24 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen" style={{ background: '#070708', color: '#fff', fontFamily: 'Inter, sans-serif' }}>
+      <style>{`
+        @keyframes ticker-move {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes hero-up {
+          from { opacity: 0; transform: translateY(22px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .hero-ticker { animation: ticker-move 38s linear infinite; }
+        .hero-ticker:hover { animation-play-state: paused; }
+        .hero-line-1 { animation: hero-up 0.55s ease-out 0.05s both; }
+        .hero-line-2 { animation: hero-up 0.6s  ease-out 0.18s both; }
+        .hero-line-3 { animation: hero-up 0.6s  ease-out 0.32s both; }
+        .hero-line-4 { animation: hero-up 0.6s  ease-out 0.44s both; }
+        .hero-line-5 { animation: hero-up 0.6s  ease-out 0.55s both; }
+        .hero-demo   { animation: hero-up 0.75s ease-out 0.3s  both; }
+      `}</style>
 
       {/* NAV */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4"
@@ -259,82 +292,137 @@ export default function Landing() {
       </nav>
 
       {/* HERO */}
-      <section className="relative min-h-screen flex items-center px-6 pt-20 pb-16 overflow-hidden">
-        {/* Grid background */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
-          }} />
-        {/* Left red glow */}
-        <div className="absolute pointer-events-none"
-          style={{
-            top: 0, left: '-20%', right: '40%', bottom: 0,
-            background: 'radial-gradient(ellipse 60% 70% at 20% 50%, rgba(250,19,58,0.07) 0%, transparent 65%)',
-          }} />
+      <section className="relative min-h-screen flex flex-col overflow-hidden" style={{ background: '#070708' }}>
 
-        <div className="relative z-10 max-w-6xl mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        {/* Grain texture */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+          backgroundSize: '220px',
+          opacity: 0.28,
+          mixBlendMode: 'overlay',
+        }} />
+
+        {/* Volcanic glow — rises from bottom */}
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{
+          height: '75%',
+          background: 'radial-gradient(ellipse 85% 55% at 45% 100%, rgba(250,19,58,0.2) 0%, rgba(180,10,30,0.07) 45%, transparent 70%)',
+        }} />
+
+        {/* Top-right darkness */}
+        <div className="absolute top-0 right-0 pointer-events-none" style={{
+          width: '55%', height: '55%',
+          background: 'radial-gradient(ellipse at 100% 0%, rgba(0,0,0,0.55) 0%, transparent 70%)',
+        }} />
+
+        {/* ── TICKER ── */}
+        <div className="relative z-10 mt-16 overflow-hidden" style={{
+          borderTop: '1px solid rgba(250,19,58,0.18)',
+          borderBottom: '1px solid rgba(250,19,58,0.18)',
+          background: 'rgba(250,19,58,0.04)',
+          padding: '9px 0',
+        }}>
+          <div className="flex whitespace-nowrap hero-ticker">
+            {[...TICKER, ...TICKER].map((item, i) => (
+              <span key={i} className="inline-flex items-center gap-2.5 px-5">
+                <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+                  {item.label}
+                </span>
+                <span style={{ color: item.red ? '#FA133A' : '#22c55e', fontSize: '0.78rem', fontWeight: 800 }}>
+                  {item.amount}
+                </span>
+                <span style={{ color: 'rgba(255,255,255,0.1)', fontSize: '0.9rem' }}>·</span>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* ── MAIN CONTENT ── */}
+        <div className="relative z-10 flex-1 flex items-center px-6 py-10 lg:py-0">
+          <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-20 items-center">
 
             {/* Left: text */}
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-8"
-                style={{ background: 'rgba(250,19,58,0.1)', border: '1px solid rgba(250,19,58,0.25)', color: '#FA133A' }}>
-                <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#FA133A' }} />
-                Gratis · IA en español · Sin instalación
+              {/* Overline */}
+              <div className="hero-line-1 flex items-center gap-3 mb-7">
+                <span style={{ display: 'inline-block', width: 28, height: 2, background: '#FA133A', borderRadius: 2 }} />
+                <span style={{ color: '#FA133A', fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.22em', textTransform: 'uppercase' }}>
+                  GastIA · Finanzas personales
+                </span>
               </div>
 
-              <h1 className="font-black leading-none tracking-tight mb-6"
-                style={{ fontSize: 'clamp(2.8rem, 6.5vw, 5rem)', letterSpacing: '-0.035em' }}>
-                Tus finanzas,<br />
-                <span style={{
-                  background: 'linear-gradient(120deg, #FA133A 0%, #ff4d6a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}>
-                  sin el caos.
+              {/* Headline */}
+              <h1 className="hero-line-2 font-black leading-none mb-8"
+                style={{ fontSize: 'clamp(3.4rem, 8.5vw, 6.8rem)', letterSpacing: '-0.045em' }}>
+                <span className="block" style={{ color: 'rgba(255,255,255,0.92)' }}>¿En qué</span>
+                <span className="block" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                  <span style={{
+                    color: '#FA133A',
+                    background: 'rgba(250,19,58,0.12)',
+                    border: '1.5px solid rgba(250,19,58,0.35)',
+                    borderRadius: '8px',
+                    padding: '0 0.18em 0.04em',
+                    transform: 'rotate(-0.6deg)',
+                    display: 'inline-block',
+                  }}>
+                    se fue
+                  </span>
                 </span>
+                <span className="block" style={{ color: 'rgba(255,255,255,0.92)' }}>el sueldo?</span>
               </h1>
 
-              <p className="text-lg leading-relaxed mb-8 max-w-md"
-                style={{ color: 'rgba(255,255,255,0.5)' }}>
-                Hablá o escribí como si le mandaras un mensaje a alguien.
-                GastIA clasifica, categoriza y te muestra el panorama completo.
+              {/* Body */}
+              <p className="hero-line-3 mb-9"
+                style={{ color: 'rgba(255,255,255,0.42)', fontSize: 'clamp(1rem, 1.4vw, 1.12rem)', lineHeight: 1.7, maxWidth: '34rem' }}>
+                Escribí o hablá como si le contaras a alguien.
+                GastIA lo clasifica, lo categoriza y te muestra el panorama completo.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-3 mb-10">
-                <Link to="/registro" className="btn-red px-7 py-3.5 rounded-xl text-base text-center">
-                  Empezar gratis →
+              {/* CTA */}
+              <div className="hero-line-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-10">
+                <Link to="/registro"
+                  className="btn-red text-center font-black"
+                  style={{ padding: '14px 36px', fontSize: '1rem', borderRadius: 14, letterSpacing: '-0.01em' }}>
+                  Empezar gratis —
                 </Link>
                 <Link to="/login"
-                  className="px-7 py-3.5 rounded-xl text-base font-semibold text-center transition-all"
-                  style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.1)' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; e.currentTarget.style.color = '#fff' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(255,255,255,0.6)' }}>
+                  style={{ color: 'rgba(255,255,255,0.38)', fontSize: '0.88rem', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 4 }}
+                  onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,0.75)'}
+                  onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.38)'}>
                   Ya tengo cuenta
                 </Link>
               </div>
 
-              {/* Micro stats */}
-              <div className="flex items-center gap-8 flex-wrap">
+              {/* Anti-features */}
+              <div className="hero-line-5 flex flex-wrap gap-x-5 gap-y-2">
                 {[
-                  { value: 'Gratis', label: 'para siempre' },
-                  { value: '< 60s', label: 'para registrar' },
-                  { value: '100%', label: 'en español río.' },
-                ].map((s, i) => (
-                  <div key={i}>
-                    <div className="text-xl font-black text-white">{s.value}</div>
-                    <div className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>{s.label}</div>
-                  </div>
+                  { text: 'Sin planillas de Excel', neg: true },
+                  { text: 'Sin formularios raros', neg: true },
+                  { text: '100% en rioplatense', neg: false },
+                ].map((f, i) => (
+                  <span key={i} style={{
+                    color: f.neg ? 'rgba(255,255,255,0.28)' : 'rgba(34,197,94,0.7)',
+                    fontSize: '0.78rem',
+                    fontWeight: 600,
+                  }}>
+                    {f.neg ? '✗ ' : '✓ '}{f.text}
+                  </span>
                 ))}
               </div>
             </div>
 
-            {/* Right: animated demo */}
-            <div className="flex justify-center lg:justify-end pt-8 pb-8">
-              <ChatDemo />
+            {/* Right: Chat demo */}
+            <div className="hero-demo flex justify-center lg:justify-end">
+              <div style={{ position: 'relative' }}>
+                {/* Glow behind the card */}
+                <div style={{
+                  position: 'absolute', inset: '-30px',
+                  background: 'radial-gradient(ellipse at 50% 60%, rgba(250,19,58,0.12) 0%, transparent 70%)',
+                  pointerEvents: 'none',
+                }} />
+                <ChatDemo />
+              </div>
             </div>
+
           </div>
         </div>
       </section>

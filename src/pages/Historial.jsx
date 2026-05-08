@@ -117,8 +117,14 @@ export default function Historial() {
     URL.revokeObjectURL(url)
   }
 
-  const totalGastos = movimientos.filter(m => m._tipo === 'gasto').reduce((a, m) => a + Number(m.monto), 0)
-  const totalIngresos = movimientos.filter(m => m._tipo === 'ingreso').reduce((a, m) => a + Number(m.monto), 0)
+  const totalGastos = movimientos.filter(m =>
+    m._tipo === 'gasto' ||
+    (m._tipo === 'transferencia' && filtroCuenta && m.cuenta_origen_id === filtroCuenta)
+  ).reduce((a, m) => a + Number(m.monto), 0)
+  const totalIngresos = movimientos.filter(m =>
+    m._tipo === 'ingreso' ||
+    (m._tipo === 'transferencia' && filtroCuenta && m.cuenta_destino_id === filtroCuenta)
+  ).reduce((a, m) => a + Number(m.monto), 0)
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6">
@@ -196,16 +202,20 @@ export default function Historial() {
         <div className="space-y-2">
           {movimientos.map(item => {
             const esTransferencia = item._tipo === 'transferencia'
+            const transEsEgreso = esTransferencia && filtroCuenta && item.cuenta_origen_id === filtroCuenta
+            const transEsIngreso = esTransferencia && filtroCuenta && item.cuenta_destino_id === filtroCuenta
+            const tipoDisplay = transEsEgreso ? 'gasto' : transEsIngreso ? 'ingreso' : item._tipo
+            const esNeutral = esTransferencia && !transEsEgreso && !transEsIngreso
             const cuentaOrigen = esTransferencia ? cuentas.find(c => c.id === item.cuenta_origen_id) : null
             const cuentaDestino = esTransferencia ? cuentas.find(c => c.id === item.cuenta_destino_id) : null
             return (
               <div key={`${item._tipo}-${item.id}`}
                 className="card-dark p-4 flex items-center gap-3">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold ${
-                  esTransferencia ? 'bg-blue-500/15 text-blue-400' :
-                  item._tipo === 'gasto' ? 'bg-[#FA133A]/15 text-[#FA133A]' : 'bg-green-500/15 text-green-400'
+                  esNeutral ? 'bg-blue-500/15 text-blue-400' :
+                  tipoDisplay === 'gasto' ? 'bg-[#FA133A]/15 text-[#FA133A]' : 'bg-green-500/15 text-green-400'
                 }`}>
-                  {esTransferencia ? '↔' : item._tipo === 'gasto' ? '↓' : '↑'}
+                  {esNeutral ? '↔' : tipoDisplay === 'gasto' ? '↓' : '↑'}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
@@ -228,10 +238,10 @@ export default function Historial() {
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <span className={`font-bold text-sm ${
-                    esTransferencia ? 'text-blue-400' :
-                    item._tipo === 'gasto' ? 'text-[#FA133A]' : 'text-green-400'
+                    esNeutral ? 'text-blue-400' :
+                    tipoDisplay === 'gasto' ? 'text-[#FA133A]' : 'text-green-400'
                   }`}>
-                    {!esTransferencia && (item._tipo === 'ingreso' ? '+' : '-')}{fmt(item.monto)}
+                    {esNeutral ? '' : tipoDisplay === 'ingreso' ? '+' : '-'}{fmt(item.monto)}
                   </span>
                   {!esTransferencia && (
                     <button

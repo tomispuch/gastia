@@ -168,8 +168,11 @@ export default function Home() {
             body: JSON.stringify({ texto, user_id: user.id, fecha, cuenta_id: cuentaId }),
           })
         } catch {
-          // El fetch en sí falló — CORS bloqueado, N8N inaccesible, sin red
-          setFormError('No se pudo conectar con el servidor. Verificá tu conexión o que N8N esté activo.')
+          if (!navigator.onLine) {
+            setFormError('Sin conexión a internet. Conectate a una red e intentá de nuevo.')
+          } else {
+            setFormError('No se pudo conectar con el servidor. Verificá que N8N esté activo.')
+          }
           setFormLoading(false)
           return
         }
@@ -188,7 +191,7 @@ export default function Home() {
       }
       setResultado(data)
       if (data.ok) { verificarPrimerGasto(); fetchData() }
-    } catch { setFormError('Error inesperado. Intentá de nuevo.') }
+    } catch { setFormError(!navigator.onLine ? 'Sin conexión a internet. Conectate a una red e intentá de nuevo.' : 'Error inesperado. Intentá de nuevo.') }
     finally { setFormLoading(false) }
   }
 

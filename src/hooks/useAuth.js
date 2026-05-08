@@ -11,8 +11,13 @@ export function useAuth() {
       setLoading(false)
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null)
+      if (event === 'SIGNED_IN' && session?.user) {
+        supabase.from('usuarios_config')
+          .upsert({ user_id: session.user.id, email: session.user.email }, { onConflict: 'user_id' })
+          .then(() => {})
+      }
     })
 
     // Cuando la PWA vuelve al frente después de estar en segundo plano,

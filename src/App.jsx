@@ -10,6 +10,7 @@ import Registro from './pages/Registro'
 import Home from './pages/Home'
 import Layout from './components/Layout'
 import ResetPassword from './pages/ResetPassword'
+import ForgotPassword from './pages/ForgotPassword'
 
 // Carga diferida — páginas secundarias, se descargan solo cuando se navega a ellas
 const Historial     = lazy(() => import('./pages/Historial'))
@@ -53,6 +54,7 @@ export default function App() {
         <Route path="/registro" element={<PublicRoute><Registro /></PublicRoute>} />
         <Route path="/terminos" element={<Suspense fallback={<Spinner />}><Terminos /></Suspense>} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
           <Route path="/home" element={<Home />} />
           <Route path="/historial"    element={<Suspense fallback={<Spinner />}><Historial /></Suspense>} />

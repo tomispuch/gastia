@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+
 import { supabase } from '../lib/supabase'
 import { isValidEmail } from '../lib/validate'
 
@@ -124,18 +125,13 @@ export default function Login() {
             </button>
 
             <div className="flex items-center justify-between text-sm pt-1">
-              <button
-                type="button"
-                onClick={async () => {
-                  if (!email) { setError('Ingresá tu email para recuperar la contraseña.'); return }
-                  await supabase.auth.resetPasswordForEmail(email)
-                  setError('')
-                  alert('Te enviamos un email para recuperar tu contraseña.')
-                }}
+              <Link
+                to="/forgot-password"
+                state={{ email }}
                 className="text-gray-400 hover:text-[#FA133A] transition-colors text-xs"
               >
                 Olvidé mi contraseña
-              </button>
+              </Link>
               <Link to="/registro" className="text-xs font-semibold text-[#FA133A] hover:text-red-700 transition-colors">
                 Crear cuenta →
               </Link>

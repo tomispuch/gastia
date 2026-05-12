@@ -12,6 +12,10 @@ export function useAuth() {
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        window.location.replace('/reset-password')
+        return
+      }
       setUser(session?.user ?? null)
       if (event === 'SIGNED_IN' && session?.user) {
         supabase.from('usuarios_config')

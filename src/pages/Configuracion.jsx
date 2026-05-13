@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { usePlan } from '../hooks/usePlan'
+import { useToast } from '../context/ToastContext'
 
 export default function Configuracion() {
   const { user } = useAuth()
   const { plan, nombre } = usePlan(user?.id)
+  const { showToast } = useToast()
 
   const [newPassword, setNewPassword] = useState('')
   const [pwSuccess, setPwSuccess] = useState(false)
@@ -33,12 +35,13 @@ export default function Configuracion() {
     setPwLoading(true)
     const { error } = await supabase.auth.updateUser({ password: newPassword })
     setPwLoading(false)
-    if (error) { setPwError(error.message) } else { setPwSuccess(true); setNewPassword('') }
+    if (error) { setPwError(error.message) } else { setPwSuccess(true); setNewPassword(''); showToast('Contraseña actualizada.') }
   }
 
   async function toggleResumen(val) {
     setResumenActivo(val)
     await supabase.from('usuarios_config').update({ resumen_mensual_activo: val }).eq('user_id', user.id)
+    showToast(val ? 'Resumen mensual activado.' : 'Resumen mensual desactivado.')
   }
 
   async function handleAddCategoria(e) {
@@ -49,11 +52,13 @@ export default function Configuracion() {
     setCategorias(prev => [...prev, data])
     setNuevaCategoria('')
     setCatLoading(false)
+    showToast('Categoría agregada.')
   }
 
   async function handleDeleteCategoria(id) {
     await supabase.from('categorias_custom').delete().eq('id', id)
     setCategorias(prev => prev.filter(c => c.id !== id))
+    showToast('Categoría eliminada.')
   }
 
   return (

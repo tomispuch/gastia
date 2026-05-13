@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
+import { useToast } from '../context/ToastContext'
 
 const CATEGORIAS_GASTO = ['Comida y bebida','Transporte','Salud','Vivienda','Entretenimiento','Ropa e indumentaria','Educación','Tecnología','Viajes','Impuesto','Otros']
 const CATEGORIAS_INGRESO = ['Sueldo','Freelance','Venta','Inversiones','Regalo','Otro']
@@ -28,6 +29,7 @@ function formatFecha(date) {
 
 export default function Recurrentes() {
   const { user } = useAuth()
+  const { showToast } = useToast()
   const [items, setItems] = useState([])
   const [cuentas, setCuentas] = useState([])
   const [loading, setLoading] = useState(true)
@@ -50,6 +52,7 @@ export default function Recurrentes() {
   useEffect(() => { if (user) fetchData() }, [user, fetchData])
 
   async function handleSave(formData) {
+    const esEdicion = Boolean(editando)
     if (editando) {
       await supabase.from('movimientos_recurrentes').update(formData).eq('id', editando.id)
     } else {
@@ -58,6 +61,7 @@ export default function Recurrentes() {
     setShowForm(false)
     setEditando(null)
     fetchData()
+    showToast(esEdicion ? 'Recurrente actualizado.' : 'Recurrente creado.')
   }
 
   async function handleToggle(item) {
@@ -65,12 +69,14 @@ export default function Recurrentes() {
     await supabase.from('movimientos_recurrentes').update({ activo: !item.activo }).eq('id', item.id)
     setToggling(null)
     fetchData()
+    showToast(item.activo ? 'Recurrente pausado.' : 'Recurrente activado.')
   }
 
   async function handleDelete(item) {
     await supabase.from('movimientos_recurrentes').delete().eq('id', item.id)
     setConfirmDelete(null)
     fetchData()
+    showToast('Recurrente eliminado.')
   }
 
   const activos = items.filter(i => i.activo)

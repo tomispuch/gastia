@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { usePlan } from '../hooks/usePlan'
+import { useToast } from '../context/ToastContext'
 
 const CATEGORIAS_GASTO = ['Comida y bebida','Transporte','Salud','Vivienda','Entretenimiento','Ropa e indumentaria','Educación','Tecnología','Viajes','Impuesto','Otros']
 const CATEGORIAS_INGRESO = ['Sueldo','Freelance','Venta','Inversiones','Regalo','Otro']
@@ -22,6 +23,7 @@ function getMonthRange(year, month) {
 export default function Historial() {
   const { user } = useAuth()
   const { plan } = usePlan(user?.id)
+  const { showToast } = useToast()
 
   const now = new Date()
   const [mes, setMes] = useState(now.getMonth() + 1)
@@ -75,6 +77,7 @@ export default function Historial() {
     await supabase.from(table).delete().eq('id', item.id)
     setConfirmDelete(null)
     fetchMovimientos()
+    showToast('Movimiento eliminado.')
   }
 
   async function handleEdit(item, formData) {
@@ -82,6 +85,7 @@ export default function Historial() {
     await supabase.from(table).update(formData).eq('id', item.id)
     setEditando(null)
     fetchMovimientos()
+    showToast('Movimiento actualizado.')
   }
 
   function handleExport() {

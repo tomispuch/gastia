@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { GamificacionProvider } from './context/GamificacionContext'
+import { ToastProvider } from './context/ToastContext'
 
 // Carga inmediata — rutas que el usuario ve al abrir la app
 import Landing from './pages/Landing'
@@ -47,6 +48,7 @@ function PublicRoute({ children }) {
 
 export default function App() {
   return (
+    <ToastProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
@@ -70,5 +72,6 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </ToastProvider>
   )
 }

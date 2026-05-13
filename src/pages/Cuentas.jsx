@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { localDateStr } from '../lib/validate'
+import { useToast } from '../context/ToastContext'
 
 const TIPOS = [
   { tipo: 'general',  label: 'General',           icono: '💰', color: '#6B7280' },
@@ -16,6 +17,7 @@ function fmt(n) { return '$' + Number(n).toLocaleString('es-AR') }
 
 export default function Cuentas() {
   const { user } = useAuth()
+  const { showToast } = useToast()
   const [cuentas, setCuentas] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -51,17 +53,20 @@ export default function Cuentas() {
   useEffect(() => { if (user) fetchCuentas() }, [user, fetchCuentas])
 
   async function handleSave(formData) {
+    const esEdicion = Boolean(editando)
     if (editando) {
       await supabase.from('cuentas').update(formData).eq('id', editando.id)
     } else {
       await supabase.from('cuentas').insert({ ...formData, user_id: user.id })
     }
     setShowForm(false); setEditando(null); fetchCuentas()
+    showToast(esEdicion ? 'Cuenta actualizada.' : 'Cuenta creada.')
   }
 
   async function handleDelete(cuenta) {
     await supabase.from('cuentas').delete().eq('id', cuenta.id)
     setConfirmDelete(null); fetchCuentas()
+    showToast('Cuenta eliminada.')
   }
 
   const totalBalance = cuentas.filter(c => c.tipo !== 'ahorro').reduce((a, c) => a + (c.balance || 0), 0)
@@ -154,7 +159,7 @@ export default function Cuentas() {
           cuentas={cuentas}
           userId={user.id}
           onClose={() => setShowTransfer(false)}
-          onSave={() => { setShowTransfer(false); fetchCuentas() }}
+          onSave={() => { setShowTransfer(false); fetchCuentas(); showToast('Transferencia realizada.') }}
         />
       )}
 

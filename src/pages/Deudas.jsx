@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { localDateStr } from '../lib/validate'
+import { useToast } from '../context/ToastContext'
 
 function fmt(n) {
   return '$' + Number(n).toLocaleString('es-AR')
@@ -9,6 +10,7 @@ function fmt(n) {
 
 export default function Deudas() {
   const { user } = useAuth()
+  const { showToast } = useToast()
   const [deudas, setDeudas] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -35,12 +37,14 @@ export default function Deudas() {
   async function handleTogglePagado(deuda) {
     await supabase.from('deudas').update({ pagado: !deuda.pagado }).eq('id', deuda.id)
     fetchDeudas()
+    showToast(deuda.pagado ? 'Marcada como pendiente.' : 'Deuda saldada.')
   }
 
   async function handleDelete(id) {
     await supabase.from('deudas').delete().eq('id', id)
     setConfirmDelete(null)
     fetchDeudas()
+    showToast('Deuda eliminada.')
   }
 
   const debo = deudas.filter(d => d.tipo === 'debo')
@@ -158,6 +162,7 @@ export default function Deudas() {
             await supabase.from('deudas').insert({ ...data, user_id: user.id })
             setShowForm(false)
             fetchDeudas()
+            showToast('Deuda guardada.')
           }}
           tabInicial={tab}
         />

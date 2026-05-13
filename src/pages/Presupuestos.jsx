@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { usePlan } from '../hooks/usePlan'
+import { useToast } from '../context/ToastContext'
 
 const CATEGORIAS_GASTO = ['Comida y bebida','Transporte','Salud','Vivienda','Entretenimiento','Ropa e indumentaria','Educación','Tecnología','Viajes','Impuesto','Otros']
 
@@ -12,6 +13,7 @@ function fmt(n) {
 export default function Presupuestos() {
   const { user } = useAuth()
   const { plan, loading: planLoading } = usePlan(user?.id)
+  const { showToast } = useToast()
   const [cuentas, setCuentas] = useState([])
   const [cuentaSeleccionada, setCuentaSeleccionada] = useState('')
   const [presupuestos, setPresupuestos] = useState({})
@@ -80,6 +82,7 @@ export default function Presupuestos() {
     }
     setSaving(null)
     fetchData()
+    showToast('Presupuesto guardado.')
   }
 
   if (!planLoading && plan !== 'pro') {

@@ -7,6 +7,7 @@ export default function Registro() {
   const [nombre, setNombre] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
@@ -28,6 +29,10 @@ export default function Registro() {
     }
     if (!isValidPassword(password)) {
       setError('La contraseña debe tener al menos 8 caracteres.')
+      return
+    }
+    if (password !== confirm) {
+      setError('Las contraseñas no coinciden.')
       return
     }
 
@@ -165,6 +170,18 @@ export default function Registro() {
                 onChange={e => setPassword(e.target.value)}
                 className="input-base"
                 placeholder="Mínimo 8 caracteres"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1.5 tracking-wide uppercase">Repetir contraseña</label>
+              <input
+                type="password"
+                required
+                value={confirm}
+                onChange={e => setConfirm(e.target.value)}
+                className="input-base"
+                placeholder="Repetí tu contraseña"
               />
             </div>
 

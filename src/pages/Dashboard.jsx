@@ -235,7 +235,7 @@ export default function Dashboard() {
   ].sort((a, b) => new Date(b.fecha) - new Date(a.fecha)).slice(0, 5)
 
   const ahorroAccounts = cuentas.filter(c => c.tipo === 'ahorro')
-  const lastEvol = evolucionData.at(-1) || {}
+  const lastEvol = evolucionData[evolucionData.length - 1] || {}
   const ahorroBalance = ahorroAccounts.reduce((sum, c) => sum + (lastEvol[c.id] || 0), 0)
 
   return (

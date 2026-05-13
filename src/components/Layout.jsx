@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Outlet, NavLink, useNavigate } from 'react-router-dom'
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { usePlan } from '../hooks/usePlan'
 import { useGamificacion } from '../context/GamificacionContext'
 import LogroToast from './LogroToast'
+import ErrorBoundary from './ErrorBoundary'
 
 const navItems = [
   { to: '/home',          label: 'Inicio',       icon: '🏠', plans: ['gratis', 'pro'] },
@@ -25,6 +26,7 @@ export default function Layout() {
   const { plan } = usePlan(user?.id)
   const { nivel } = useGamificacion()
   const navigate = useNavigate()
+  const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
 
   async function handleLogout() {
@@ -173,7 +175,9 @@ export default function Layout() {
 
       {/* Main content */}
       <main className="flex-1 overflow-auto pt-12 pb-6 md:pt-[88px]">
-        <Outlet />
+        <ErrorBoundary key={location.pathname}>
+          <Outlet />
+        </ErrorBoundary>
 
         {/* TRS credit — aparece al pie de todas las páginas */}
         <div className="flex flex-col items-center gap-3 py-8 mt-4">

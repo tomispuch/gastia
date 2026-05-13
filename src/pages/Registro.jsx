@@ -69,14 +69,20 @@ export default function Registro() {
 
     if (data.user) {
       try {
-        await supabase.from('cuentas').insert({
-          user_id: data.user.id,
-          nombre: 'General',
-          tipo: 'general',
-          icono: '💰',
-          color: '#6B7280',
-          saldo_inicial: 0,
-        })
+        await Promise.all([
+          supabase.from('cuentas').insert({
+            user_id: data.user.id,
+            nombre: 'General',
+            tipo: 'general',
+            icono: '💰',
+            color: '#6B7280',
+            saldo_inicial: 0,
+          }),
+          supabase.from('usuarios_config').upsert(
+            { user_id: data.user.id, email: data.user.email, resumen_mensual_activo: true },
+            { onConflict: 'user_id' }
+          ),
+        ])
       } catch { /* ignorar errores silenciosamente */ }
     }
 

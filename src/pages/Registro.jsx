@@ -79,7 +79,7 @@ export default function Registro() {
             saldo_inicial: 0,
           }),
           supabase.from('usuarios_config').upsert(
-            { user_id: data.user.id, email: data.user.email, resumen_mensual_activo: true },
+            { user_id: data.user.id, email: data.user.email, nombre: nombreSanitized, resumen_mensual_activo: true },
             { onConflict: 'user_id' }
           ),
         ])

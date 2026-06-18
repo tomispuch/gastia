@@ -6,16 +6,223 @@
     <link rel="apple-touch-icon" href="/icon-512.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#070708" />
-    <meta name="description" content="Gestor de Gastos - TRS Automatizaciones" />
+    <meta name="description" content="Registrá gastos e ingresos por voz o texto. IA que clasifica todo sola." />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="GastIA" />
     <link rel="manifest" href="/manifest.json" />
     <title>GastIA - Gestor de gastos</title>
-    <script type="module" crossorigin src="/assets/index-IdRagVTn.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-ub4LUigM.css">
+    <!-- Google Fonts como link (no @import) para no bloquear el CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Inter:wght@400;500;600;700;800;900&display=swap" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body {
+        background: #D6D7D7;
+        min-height: 100%;
+      }
+
+      /* Spinner CSS-independiente para que funcione antes de que cargue Tailwind */
+      @keyframes rsk-spin { to { transform: rotate(360deg); } }
+      .rsk-spinner-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100svh;
+        background: #D6D7D7;
+      }
+      .rsk-spinner {
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        border: 2.5px solid rgba(250,19,58,0.25);
+        border-top-color: #FA133A;
+        animation: rsk-spin 0.75s linear infinite;
+        flex-shrink: 0;
+      }
+
+      /* ── Shimmer animation ── */
+      @keyframes sk-shine {
+        0%   { background-position: -600px 0; }
+        100% { background-position: 600px 0; }
+      }
+      .sk {
+        background: linear-gradient(
+          90deg,
+          #131416 0%,
+          #1d1f23 40%,
+          #131416 80%
+        );
+        background-size: 1200px 100%;
+        animation: sk-shine 1.8s ease-in-out infinite;
+        border-radius: 10px;
+      }
+
+      /* ── Skeleton layout ── */
+      #sk-root {
+        min-height: 100svh;
+        background: #D6D7D7;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Top bar */
+      #sk-header {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        height: 48px;
+        background: rgba(7,7,8,0.95);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        z-index: 50;
+      }
+      .sk-logo {
+        width: 32px; height: 32px;
+        border-radius: 8px;
+      }
+      .sk-menu {
+        width: 22px; height: 16px;
+        border-radius: 3px;
+      }
+
+      /* Content */
+      #sk-content {
+        padding: 64px 16px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-width: 672px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      /* Welcome */
+      .sk-welcome { display: flex; flex-direction: column; gap: 6px; }
+      .sk-welcome .sk:nth-child(1) { width: 90px; height: 13px; }
+      .sk-welcome .sk:nth-child(2) { width: 160px; height: 28px; }
+
+      /* Stats card */
+      .sk-card {
+        background: #0d0e11;
+        border-radius: 18px;
+        padding: 20px;
+      }
+      .sk-card-label { width: 120px; height: 11px; margin-bottom: 16px; }
+      .sk-grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .sk-stat { display: flex; flex-direction: column; gap: 6px; }
+      .sk-stat-label { height: 10px; width: 55px; }
+      .sk-stat-value { height: 22px; width: 80px; }
+
+      /* Account cards row */
+      .sk-accounts-label { width: 70px; height: 11px; }
+      .sk-accounts-row {
+        display: flex;
+        gap: 12px;
+        overflow: hidden;
+      }
+      .sk-account {
+        background: #0d0e11;
+        border-radius: 14px;
+        padding: 14px;
+        min-width: 140px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .sk-account-top { display: flex; align-items: center; gap: 8px; }
+      .sk-account-icon { width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0; }
+      .sk-account-name { height: 10px; flex: 1; }
+      .sk-account-amount { height: 18px; width: 90px; }
+
+      /* Form card */
+      .sk-form-card {
+        background: #0d0e11;
+        border-radius: 18px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .sk-form-title { height: 14px; width: 140px; }
+      .sk-textarea   { height: 72px; border-radius: 12px; }
+      .sk-row        { display: flex; gap: 8px; }
+      .sk-input-sm   { height: 38px; flex: 1; }
+      .sk-btn        { height: 46px; border-radius: 12px; }
+    </style>
+    <script type="module" crossorigin src="/assets/index-DDSygmLd.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CkRrq9h4.css">
   <script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Skeleton visible mientras React carga -->
+      <div id="sk-root">
+
+        <div id="sk-header">
+          <div class="sk sk-logo"></div>
+          <div class="sk sk-menu"></div>
+        </div>
+
+        <div id="sk-content">
+
+          <div class="sk-welcome">
+            <div class="sk"></div>
+            <div class="sk"></div>
+          </div>
+
+          <div class="sk-card">
+            <div class="sk sk-card-label"></div>
+            <div class="sk-grid3">
+              <div class="sk-stat">
+                <div class="sk sk-stat-label"></div>
+                <div class="sk sk-stat-value"></div>
+              </div>
+              <div class="sk-stat">
+                <div class="sk sk-stat-label"></div>
+                <div class="sk sk-stat-value"></div>
+              </div>
+              <div class="sk-stat">
+                <div class="sk sk-stat-label"></div>
+                <div class="sk sk-stat-value"></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="sk sk-accounts-label" style="margin-bottom:8px;"></div>
+            <div class="sk-accounts-row">
+              <div class="sk-account">
+                <div class="sk-account-top">
+                  <div class="sk sk-account-icon"></div>
+                  <div class="sk sk-account-name"></div>
+                </div>
+                <div class="sk sk-account-amount"></div>
+              </div>
+              <div class="sk-account">
+                <div class="sk-account-top">
+                  <div class="sk sk-account-icon"></div>
+                  <div class="sk sk-account-name"></div>
+                </div>
+                <div class="sk sk-account-amount"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sk-form-card">
+            <div class="sk sk-form-title"></div>
+            <div class="sk sk-textarea"></div>
+            <div class="sk-row">
+              <div class="sk sk-input-sm"></div>
+              <div class="sk sk-input-sm"></div>
+            </div>
+            <div class="sk sk-btn"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
   </body>
 </html>

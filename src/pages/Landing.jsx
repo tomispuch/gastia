@@ -212,15 +212,6 @@ function ChatDemo() {
   )
 }
 
-function SectionLabel({ label }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-      <div style={{ width: '4px', height: '18px', background: '#FA133A', borderRadius: '2px', flexShrink: 0 }} />
-      <span style={{ color: '#FA133A', fontSize: '0.66rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase' }}>{label}</span>
-    </div>
-  )
-}
-
 function SectionTitle({ children }) {
   return (
     <h2 style={{
@@ -438,12 +429,7 @@ export default function Landing() {
           <div style={{ maxWidth: '1180px', margin: '0 auto', width: '100%' }}>
             <div className="hero-grid">
               <div>
-                <div className="hl1" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }}>
-                  <div style={{ width: '4px', height: '16px', background: '#FA133A', borderRadius: '2px' }} />
-                  <span style={{ color: '#FA133A', fontSize: '0.66rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase' }}>GastIA · Finanzas personales</span>
-                </div>
-
-                <h1 className="hl2" style={{
+                <h1 className="hl1" style={{
                   fontFamily: "'Barlow Condensed', sans-serif",
                   fontWeight: 900,
                   lineHeight: 0.9,
@@ -508,7 +494,6 @@ export default function Landing() {
 
       {/* ── FEATURES ── */}
       <section style={{ padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 3.5rem)', maxWidth: '1180px', margin: '0 auto' }}>
-        <SectionLabel label="Funcionalidades" />
         <SectionTitle>Todo lo que necesitás,<br />nada que no uses.</SectionTitle>
 
         <div className="bento-grid">
@@ -589,7 +574,6 @@ export default function Landing() {
 
       {/* ── USE CASES ── */}
       <section style={{ padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 3.5rem)', maxWidth: '1180px', margin: '0 auto' }}>
-        <SectionLabel label="Para quién" />
         <SectionTitle>¿Para quién es GastIA?</SectionTitle>
 
         <div>
@@ -648,7 +632,6 @@ export default function Landing() {
       {/* ── TESTIMONIALS ── */}
       <section style={{ padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 3.5rem)', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.012)' }}>
         <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
-          <SectionLabel label="Testimonios" />
           <SectionTitle>Lo que dicen<br />los usuarios.</SectionTitle>
 
           <div className="tgrid">
@@ -681,7 +664,6 @@ export default function Landing() {
 
       {/* ── HOW IT WORKS ── */}
       <section style={{ padding: 'clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 3.5rem)', maxWidth: '1180px', margin: '0 auto' }}>
-        <SectionLabel label="Cómo funciona" />
         <SectionTitle>Tres pasos.<br />Ninguna excusa.</SectionTitle>
 
         <div className="steps-grid">
@@ -725,9 +707,6 @@ export default function Landing() {
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(250,19,58,0.09) 0%, transparent 70%)' }} />
 
         <div style={{ position: 'relative', zIndex: 1, maxWidth: '680px', margin: '0 auto' }}>
-          <div style={{ display: 'inline-block', padding: '4px 14px', borderRadius: '4px', fontSize: '0.66rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '28px', background: 'rgba(250,19,58,0.1)', border: '1px solid rgba(250,19,58,0.22)', color: '#FA133A' }}>
-            Gratis para siempre
-          </div>
           <h2 style={{
             fontFamily: "'Barlow Condensed', sans-serif",
             fontWeight: 900,

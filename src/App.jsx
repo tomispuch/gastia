@@ -46,6 +46,9 @@ function PublicRoute({ children }) {
   return children
 }
 
+// Limpia el flag de recarga de chunks al cargar la app correctamente
+sessionStorage.removeItem('gastia_chunk_reload')
+
 export default function App() {
   return (
     <ToastProvider>

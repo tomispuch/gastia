@@ -1,5 +1,14 @@
 import { Component } from 'react'
 
+function isChunkError(error) {
+  return (
+    error?.name === 'ChunkLoadError' ||
+    error?.message?.includes('Failed to fetch dynamically imported module') ||
+    error?.message?.includes('Importing a module script failed') ||
+    error?.message?.includes('error loading dynamically imported module')
+  )
+}
+
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
@@ -8,6 +17,16 @@ export default class ErrorBoundary extends Component {
 
   static getDerivedStateFromError() {
     return { hasError: true }
+  }
+
+  componentDidCatch(error) {
+    if (isChunkError(error)) {
+      const key = 'gastia_chunk_reload'
+      if (!sessionStorage.getItem(key)) {
+        sessionStorage.setItem(key, '1')
+        window.location.reload()
+      }
+    }
   }
 
   render() {
